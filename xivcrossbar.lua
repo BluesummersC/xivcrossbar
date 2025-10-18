@@ -372,7 +372,7 @@ function update_alias_command(args)
     local slot = gamepad_converter:convert_to_slot(args[3]) or 0
     local alias = args[4]
 
-    if hotbar < 1 or hotbar > 3 then
+    if hotbar < 1 or hotbar > 7 then
         print('XIVCROSSBAR: Invalid hotbar. Please use a number between 1 and ' .. theme_options.hotbar_number .. '.')
         return
     end
@@ -541,6 +541,7 @@ end)
 windower.register_event('logout', function()
     ui:hide()
     skillchains.logout()
+    windower.send_command('lua u xivcrossbar')
 end)
 
 -- ON COMMAND

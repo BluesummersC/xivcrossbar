@@ -121,6 +121,24 @@ local ability_tool_lookup = {
     ['light-shot'] = 2182, -- Light Shot -> Light Card
     ['dark-shot'] = 2183, -- Dark Shot -> Dark Card
 }
+local requires_strategem = {
+    ['penury'] = true,
+    ['addendum:-white'] = true,
+    ['celerity'] = true,
+    ['accession'] = true,
+    ['rapture'] = true,
+    ['altruism'] = true,
+    ['tranquility'] = true,
+    ['perpetuance'] = true,
+    ['parsimony'] = true,
+    ['alacrity'] = true,
+    ['addendum:-black'] = true,
+    ['manifestation'] = true,
+    ['ebullience'] = true,
+    ['focalization'] = true,
+    ['equanimity'] = true,
+    ['immanence'] = true,
+}
 
 local master_tool_lookup = {
     -- NIN
@@ -210,11 +228,17 @@ end
 
 function consumables:get_ninja_tool_info(tool_id)
     local master_tool_id = master_tool_lookup[tool_id]
-    local tool_count = self.item_counts[tool_id]
-    local master_tool_count = self.item_counts[master_tool_id]
-    return {
-        tool_count = self.item_counts[tool_id],
+    local tool_count = 0
+    local master_tool_count = 0
+    if self.item_counts[tool_id] ~= nil then
+        tool_count = self.item_counts[tool_id]
+    end
+    if self.item_counts[master_tool_id] ~= nil then
         master_tool_count = self.item_counts[master_tool_id]
+    end
+    return {
+        tool_count = tool_count,
+        master_tool_count = master_tool_count
     }
 end
 
@@ -222,6 +246,15 @@ function consumables:get_ability_info_by_name(ability_name)
     local tool_id = ability_tool_lookup[kebab_casify(ability_name)]
     if (tool_id ~= nil) then
         return self:get_ability_tool_info(tool_id)
+    else
+        return nil
+    end
+end
+
+function consumables:get_strategem_required(ability_name)
+    local requires = requires_strategem[kebab_casify(ability_name)]
+    if (requires ~= nil) then
+        return requires
     else
         return nil
     end

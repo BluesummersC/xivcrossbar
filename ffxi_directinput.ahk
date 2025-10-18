@@ -4,11 +4,11 @@ Critical
 #SingleInstance force
 
 ; Switch windows instantaeously
-SetWinDelay, -1
+SetWinDelay -1
 
 ; Avoid warning dialogue about over-hits
 #MaxHotkeysPerInterval 50000
-#HotkeyInterval 1
+#HotkeyInterval, 1
 #WinActivateForce
 
 IniRead, ButtonLayout, config.ini, ButtonMap, ButtonLayout
@@ -70,21 +70,37 @@ return
 
 ; Helper subroutines. *DON'T* modify these to remap, instead just change which buttons call them
 SendConfirmKey:
-SendInput {Enter}
+	If !WinActive("ahk_class FFXiClass") {
+		WinActivate, ahk_class FFXiClass
+		sleep 250
+	}
+	SendInput {Enter}
 return
 SendCancelKey:
-SendInput {Esc}
+	If !WinActive("ahk_class FFXiClass") {
+		WinActivate, ahk_class FFXiClass
+		sleep 250
+	}
+	SendInput {Esc}
 return
 SendMainMenuKey:
-SendInput {NumpadSub}
+	If !WinActive("ahk_class FFXiClass") {
+		WinActivate, ahk_class FFXiClass
+		sleep 250
+	}
+	SendInput {NumpadSub}
 return
 SendActiveWindowKey:
-SendInput {NumpadAdd}
+	If !WinActive("ahk_class FFXiClass") {
+		WinActivate, ahk_class FFXiClass
+		sleep 250
+	}
+	SendInput {NumpadAdd}
 return
 
 ; Gamecube Y Button (Playstation Triangle, Xbox Y Button, Nintendo X Button, TOP face button)
-Joy1::
-If WinActive("ahk_class FFXiClass") {
+Joy4::
+;If WinActive("ahk_class FFXiClass") {
   If (isLeftTriggerDown or isRightTriggerDown) {
     SendInput {f8}
   } else {
@@ -120,12 +136,12 @@ If WinActive("ahk_class FFXiClass") {
       }
     }
   }
-}
+;}
 return
 
 ; Gamecube B Button (Playstation Square, Xbox X Button, Nintendo Y Button, LEFT face button)
-Joy2::
-If WinActive("ahk_class FFXiClass") {
+Joy1::
+;If WinActive("ahk_class FFXiClass") {
   If (isLeftTriggerDown or isRightTriggerDown) {
     SendInput {f6}
   } else {
@@ -171,12 +187,12 @@ If WinActive("ahk_class FFXiClass") {
       }
     }
   }
-}
+;}
 return
 
 ; Gamecube A Button (Playstation Cross, Xbox A Button, Nintendo B Button, BOTTOM face button)
-Joy3::
-If WinActive("ahk_class FFXiClass") {
+Joy2::
+;If WinActive("ahk_class FFXiClass") {
   If (isLeftTriggerDown or isRightTriggerDown) {
     SendInput {f5}
   } else {
@@ -212,12 +228,12 @@ If WinActive("ahk_class FFXiClass") {
       }
     }
   }
-}
+;}
 return
 
 ; Gamecube X Button (Playstation Circle, Xbox B Button, Nintendo A Button, RIGHT face button)
-Joy4::
-If WinActive("ahk_class FFXiClass") {
+Joy3::
+;If WinActive("ahk_class FFXiClass") {
   If (isLeftTriggerDown or isRightTriggerDown) {
     SendInput {f7}
   } else {
@@ -263,7 +279,7 @@ If WinActive("ahk_class FFXiClass") {
       }
     }
   }
-}
+;}
 return
 
 ; Left Trigger
@@ -283,10 +299,12 @@ If WinActive("ahk_class FFXiClass") {
   ; Otherwise, the button has been released.
   SendInput {f11 up}
   if !isRightTriggerDown {
+	SendInput {Ctrl Down}
     SendInput {Ctrl up}
   }
   isLeftTriggerDown := false
   SetTimer, WaitForButtonUp7, Off ; Turn off polling
+  ;ReleaseCtrl()
 }
 return
 
@@ -307,12 +325,33 @@ If WinActive("ahk_class FFXiClass") {
   ; Otherwise, the button has been released.
   SendInput {f12 up}
   if !isLeftTriggerDown {
+	SendInput {Ctrl Down}
     SendInput {Ctrl up}
   }
   isRightTriggerDown := false
   SetTimer, WaitForButtonUp8, Off ; Turn off polling
+  ;ReleaseCtrl()
+
 }
 return
+
+ReleaseCtrl() {
+    ;sleep 20
+	Loop, 2 {
+		SendInput {Ctrl Down}
+		sleep 20
+		SendInput {Ctrl Up}
+	}
+	return
+}
+
+#t::
+loop, 50 {
+ SendInput {Ctrl Down}
+ SendInput {Ctrl Up}
+ }
+return
+
 
 ; Opens/closes gamepad binding dialog
 Joy9::
@@ -353,5 +392,12 @@ If WinActive("ahk_class FFXiClass") {
   SendInput {Ctrl up}
   isEnvironmentDialogOpen := false
   SetTimer, WaitForButtonUp10, Off ; Turn off polling
+}
+return
+
+; Replace rb with better target
+Joy6::
+If WinActive("ahk_class FFXiClass") {
+  SendInput {f8}
 }
 return

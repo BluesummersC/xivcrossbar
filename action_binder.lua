@@ -616,7 +616,7 @@ function action_binder:submit_selected_option()
                 self.action_icon = option.data.icon_path
             end
 
-            print(self.theme_options.allow_stpc_for_self_targeted_actions)
+            print("Allow stpc for self: " .. tostring(self.theme_options.allow_stpc_for_self_targeted_actions))
             if (self.target_type['Self'] and not (self.theme_options.allow_stpc_for_self_targeted_actions or
                     self.target_type['NPC'] or
                     self.target_type['Enemy'] or
@@ -2102,8 +2102,8 @@ function get_dances(job_id, job_level)
     if (job_id == 19) then
         for i, dance in ipairs(dances) do
             if (job_level >= dance.level) then
-                local crossbar_dance = crossbar_abilities[kebab_casify(command.name)]
-                local target_type = res.job_abilities[command.id].targets
+                local crossbar_dance = crossbar_abilities[kebab_casify(dance.name)]
+                local target_type = res.job_abilities[dance.id].targets
                 local icon_path = 'ui/red-x.png'
                 local icon_offset = 0
                 local icon_overridden = true
@@ -2139,8 +2139,8 @@ function get_wards(job_id, job_level)
     if (job_id == 22) then
         for i, ward in ipairs(wards) do
             if (job_level >= ward.level) then
-                local crossbar_ward = crossbar_abilities[kebab_casify(command.name)]
-                local target_type = res.job_abilities[command.id].targets
+                local crossbar_ward = crossbar_abilities[kebab_casify(ward.name)]
+                local target_type = res.job_abilities[ward.id].targets
                 local icon_path = 'ui/red-x.png'
                 local icon_offset = 0
                 local icon_overridden = true
@@ -2175,8 +2175,8 @@ function get_effusions(job_id, job_level)
     if (job_id == 22) then
         for i, effusion in ipairs(effusions) do
             if (job_level >= effusion.level) then
-                local crossbar_effusion = crossbar_abilities[kebab_casify(command.name)]
-                local target_type = res.job_abilities[command.id].targets
+                local crossbar_effusion = crossbar_abilities[kebab_casify(effusion.name)]
+                local target_type = res.job_abilities[effusion.id].targets
                 local icon_path = 'ui/red-x.png'
                 local icon_offset = 0
                 local icon_overridden = true

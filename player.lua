@@ -35,12 +35,16 @@ local player = {}
 
 player.name = ''
 player.main_job = ''
+player.main_job_level = ''
 player.sub_job = ''
+player.sub_job_level = ''
 player.server = ''
 
 player.vitals = {}
 player.vitals.mp = 0
 player.vitals.tp = 0
+
+player.sch_jp_spent = 0
 
 player.hotbar = {}
 
@@ -49,11 +53,15 @@ player.hotbar_settings.max = 1
 player.hotbar_settings.active_hotbar = 1
 player.hotbar_settings.active_environment = 'Field'
 
+player.auto_create_xml = true
+
 -- initialize player
 function player:initialize(windower_player, server, theme_options, enchanted_items)
     self.name = windower_player.name
     self.main_job = windower_player.main_job
+    self.main_job_level = windower_player.main_job_level
     self.sub_job = windower_player.sub_job
+    self.sub_job_level = windower_player.sub_job_level
     self.server = server
     self.id = windower_player.id
     self.enchanted_items = enchanted_items
@@ -62,6 +70,10 @@ function player:initialize(windower_player, server, theme_options, enchanted_ite
 
     self.vitals.mp = windower_player.vitals.mp
     self.vitals.tp = windower_player.vitals.tp
+
+    self.sch_jp_spent = windower_player.job_points.sch.jp_spent
+
+    self.auto_create_xml = theme_options.AutoCreateXML
 
     storage:setup(self)
 end
@@ -128,7 +140,7 @@ function player:load_hotbar()
     if storage.file:exists() then
         windower.console.write('[XIVCrossbar] Load crossbar sets for ' .. storage.filename)
         self:load_from_file(storage.file)
-    else
+    elseif self.auto_create_xml then
         newly_created = true
         self:create_default_hotbar()
     end
@@ -137,7 +149,7 @@ function player:load_hotbar()
     if storage.job_default_file:exists() then
         windower.console.write('[XIVCrossbar] Load cross-subjob fallback crossbar set for ' .. player.main_job)
         self:load_from_file(storage.job_default_file)
-    else
+    elseif self.auto_create_xml then
         newly_created = true
         self:create_job_default_hotbar()
     end
@@ -146,7 +158,7 @@ function player:load_hotbar()
     if storage.all_jobs_file:exists() then
         windower.console.write('[XIVCrossbar] Load cross-job fallback crossbar set')
         self:load_from_file(storage.all_jobs_file)
-    else
+    elseif self.auto_create_xml then
         newly_created = true
         self:create_all_jobs_default_hotbar()
     end

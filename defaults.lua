@@ -36,6 +36,10 @@ defaults.iconpack = 'default'
 defaults.FrameSkip = 0
 defaults.AllowSTPCForSelfTargetedActions = false
 
+defaults.AutoCreateXML = true
+defaults.UseAltLayout = false
+defaults.AutoHideExtraBars = false
+
 defaults.SkillchainIndicator = {}
 defaults.SkillchainIndicator.Opacity = 220
 defaults.SkillchainIndicator.WindowWaitingColor = {}

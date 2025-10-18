@@ -30,6 +30,9 @@ local icon_extractor = require('ui/icon_extractor')
 local kebab_casify = require('libs/kebab_casify')
 local crossbar_abilities = require('resources/crossbar_abilities')
 local crossbar_spells = require('resources/crossbar_spells')
+local defaults = require('defaults')
+local player = require('player')
+local settings = config.load(defaults)
 
 local ui = {}
 
@@ -129,35 +132,73 @@ end
 
 -- get x position for a given hotbar and slot
 function ui:get_slot_x(h, i)
-    local base = self.pos_x - 50
-    if (h == 2) then
-        base = base + 300
-    elseif (h == 3 or h == 4) then
-        base = base + 150
-    elseif (h == 5) then
-        base = base - 70 -- left doublepress crossbar
-    elseif (h == 6) then
-        base = base + 370 -- right doublepress crossbar
-    end
+    if not self.UseAltLayout then
+        local base = self.pos_x - 50
+        if (h == 2) then
+            base = base + 300
+        elseif (h == 3 or h == 4) then
+            base = base + 150
+        elseif (h == 5) then
+            base = base - 70 -- left doublepress crossbar
+        elseif (h == 6) then
+            base = base + 370 -- right doublepress crossbar
+        end
 
-    -- move the last icon in each group of 4 to the middle create the cross
-    -- move icon 9 to the left cross's center to be the dpad icon
-    -- move icon 10 to the right cross's center to be the face buttons icon
-    local column = i
-    if (i == 4) then
-        column = 2
-    elseif (i == 9) then
-        column = 3
-    elseif (i == 8 or i == 10) then
-        column = 6
-    end
+        -- move the last icon in each group of 4 to the middle create the cross
+        -- move icon 9 to the left cross's center to be the dpad icon
+        -- move icon 10 to the right cross's center to be the face buttons icon
+        local column = i
+        if (i == 4) then
+            column = 2
+        elseif (i == 9) then
+            column = 3
+        elseif (i == 8 or i == 10) then
+            column = 6
+        end
 
-    -- shift the two crosses closer to each other
-    if (i > 4) then
-        column = column - 1
-    end
+        -- shift the two crosses closer to each other
+        if (i > 4) then
+            column = column - 1
+        end
 
-    return base + ((40 + self.slot_spacing) * (column - 1))
+        return base + ((40 + self.slot_spacing) * (column - 1))
+    else
+        local base = self.pos_x - 50
+        if (h == 2) then
+            base = base + 140
+        elseif (h == 3 or h == 4) then
+            base = base + 150
+        elseif (h == 5) then
+            base = base - 70 -- left doublepress crossbar
+        elseif (h == 6) then
+            base = base + 70 -- right doublepress crossbar
+        end
+
+        -- move the last icon in each group of 4 to the middle create the cross
+        -- move icon 9 to the left cross's center to be the dpad icon
+        -- move icon 10 to the right cross's center to be the face buttons icon
+        local column = i
+        if (i == 4) then
+            column = 2
+        elseif (i == 9) then
+            column = 3
+        elseif (i == 8 or i == 10) then
+            column = 6
+        end
+
+        -- shift the two crosses closer to each other
+        if (i > 4) then
+            if h ==1 or h == 2 then
+                column = column + 3
+            elseif h == 3 or h == 4 then
+                column = column - 1
+            else
+                column = column + 6
+            end
+        end
+
+        return base + ((40 + self.slot_spacing) * (column - 1))
+    end
 end
 
 -- get y position for a given hotbar and slot
@@ -215,6 +256,8 @@ function ui:setup(theme_options, enchanted_items)
     self.theme.slot_opacity = theme_options.slot_opacity
     self.theme.disabled_slot_opacity = theme_options.disabled_slot_opacity
     self.theme.hotbar_number = theme_options.hotbar_number
+    self.AutoHideExtraBars = theme_options.AutoHideExtraBars
+    self.UseAltLayout = theme_options.UseAltLayout
 
     self.theme.mp_cost_color_red = theme_options.mp_cost_color_red
     self.theme.mp_cost_color_green = theme_options.mp_cost_color_green
@@ -254,14 +297,26 @@ function ui:load(theme_options)
     windower.prim.set_visibility('skillchain_indicator', false)
 
     self.bar_background = images.new(images_setup)
+    self.bar_background_left = images.new(images_setup)
+    self.bar_background_right = images.new(images_setup)
     if (self.is_compact) then
-        self.bar_background:size(330, 180)
-        self.bar_background:path(windower.addon_path .. 'images/' .. get_icon_pathbase() .. '/ui/bar_bg_compact.png')
+            self.bar_background:size(330, 180)
+            self.bar_background:path(windower.addon_path .. 'images/' .. get_icon_pathbase() .. '/ui/bar_bg_compact.png')
+
+            self.bar_background_left:size(330, 180)
+            self.bar_background_left:path(windower.addon_path .. 'images/' .. get_icon_pathbase() .. '/ui/bar_bg_compact_alt.png')
+
+            self.bar_background_right:size(330, 180)
+            self.bar_background_right:path(windower.addon_path .. 'images/' .. get_icon_pathbase() .. '/ui/bar_bg_compact_alt.png')
     else
         self.bar_background:size(330, 220)
         self.bar_background:path(windower.addon_path .. 'images/' .. get_icon_pathbase() .. '/ui/bar_bg.png')
+        self.bar_background_left:path(windower.addon_path .. 'images/' .. get_icon_pathbase() .. '/ui/bar_bg_alt.png')
+        self.bar_background_right:path(windower.addon_path .. 'images/' .. get_icon_pathbase() .. '/ui/bar_bg_alt.png')
     end
     self.bar_background:alpha(self.button_bg_alpha)
+    self.bar_background_left:alpha(self.button_bg_alpha)
+    self.bar_background_right:alpha(self.button_bg_alpha)
 
     -- setup button ui hints
     self.action_binder_icon = images.new(images_setup)
@@ -317,7 +372,7 @@ function ui:load(theme_options)
             self.hotbars[h].slot_cost[i] = texts.new(right_text_setup)
             self.hotbars[h].slot_recast_text[i] = texts.new(right_text_setup)
             self.hotbars[h].slot_icon[i]:size(30, 30)
-        
+
             setup_image(self.hotbars[h].slot_background[i], windower.addon_path..'/themes/' .. (theme_options.slot_theme:lower()) .. '/slot.png')
             setup_image(self.hotbars[h].slot_icon[i], windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/blank.png')
             setup_image(self.hotbars[h].slot_frame[i], self.frame_image_path)
@@ -431,6 +486,9 @@ function ui:hide()
         self.hotbars[h].slot_recast[dpadSlot]:hide()
         self.hotbars[h].slot_recast[faceSlot]:hide()
     end
+    self.bar_background:hide()
+    self.bar_background_left:hide()
+    self.bar_background_right:hide()
 end
 
 function ui:hide_button_hints()
@@ -485,8 +543,29 @@ function ui:show_button_hints()
 end
 
 function ui:show_bar_background(hotbar_number)
+
     self.bar_background:pos(self:get_slot_x(hotbar_number, 1) - 30, self:get_slot_y(hotbar_number, 4) - 35)
-    self.bar_background:show()
+    self.bar_background_left:pos(self:get_slot_x(hotbar_number, 1) - 30, self:get_slot_y(hotbar_number, 4) - 35)
+
+    if self.UseAltLayout then
+        if hotbar_number == 3 or hotbar_number == 4 then
+            self.bar_background:show()
+            self.bar_background_left:hide()
+            self.bar_background_right:hide()
+        elseif hotbar_number == 5 or hotbar_number == 6 then
+            self.bar_background_right:pos(self:get_slot_x(hotbar_number, 1) + 430, self:get_slot_y(hotbar_number, 4) - 35)
+            self.bar_background:hide()
+            self.bar_background_left:show()
+            self.bar_background_right:show()
+        elseif hotbar_number == 1 or hotbar_number == 2 then
+            self.bar_background_right:pos(self:get_slot_x(hotbar_number, 1) + 290, self:get_slot_y(hotbar_number, 4) - 35)
+            self.bar_background:hide()
+            self.bar_background_left:show()
+            self.bar_background_right:show()
+        end
+    else
+        self.bar_background:show()
+    end
 end
 
 -----------------------------
@@ -509,8 +588,11 @@ function ui:load_player_hotbar(player_hotbar, player_vitals, environment, gamepa
 
     for h=1,self.theme.hotbar_number,1 do
         local isThisBarActive = gamepad_state.active_bar == h
+        -- print(h)
         local isThisBarVisibleByDefault = h < 3 or h > 4
+        -- local isThisBarVisibleByDefault = h < 3
         local shouldDrawDefaultVisibleBars = gamepad_state.active_bar < 3 or gamepad_state.active_bar > 4
+        -- local shouldDrawDefaultVisibleBars = gamepad_state.active_bar < 3
         local shouldDrawThisBar = isThisBarActive or isThisBarVisibleByDefault and shouldDrawDefaultVisibleBars
         for slot=1,8,1 do
             local action = nil
@@ -562,16 +644,17 @@ function ui:load_action(player_hotbar, environment, hotbar, slot, action, player
     local icon_path = nil
 
     -- if slot has a skill (ma, ja or ws)
-    if action.type == 'ma' or action.type == 'ja' or action.type == 'ws' or action.type == 'enchanteditem' then
+    if action.type == 'ma' or action.type == 'ja' or action.type == 'ws' or action.type == 'enchanteditem' or action.type == 'pet' then
         local crossbar_action = nil
 
-        if (action.type == 'ma' or action.type == 'ja' or action.typ == 'pet' or action.type == 'ws') then
+        if (action.type == 'ma' or action.type == 'ja' or action.type == 'pet' or action.type == 'ws') then
             if (action.type == 'ma') then
                 crossbar_action = crossbar_spells[kebab_casify(action.action)]
             else
                 crossbar_action = crossbar_abilities[kebab_casify(action.action)]
             end
 
+            -- print(action.action)
             icon_path, icon_overridden = maybe_get_custom_icon(crossbar_action.default_icon, crossbar_action.custom_icon)
 
             -- display element
@@ -863,12 +946,21 @@ function ui:check_recasts(player_hotbar, player_vitals, environment, spells, gam
         self:show_bar_background(gamepad_state.active_bar)
     else
         self.bar_background:hide()
+        self.bar_background_left:hide()
+        self.bar_background_right:hide()
     end
 
     for h=1,self.theme.hotbar_number,1 do
         local isThisBarActive = gamepad_state.active_bar == h
-        local isThisBarVisibleByDefault = h < 3 or h > 4
-        local shouldDrawDefaultVisibleBars = gamepad_state.active_bar < 3 or gamepad_state.active_bar > 4
+        local isThisBarVisibleByDefault
+        local shouldDrawDefaultVisibleBars
+        if not self.AutoHideExtraBars then
+            isThisBarVisibleByDefault = h < 3 or h > 4
+            shouldDrawDefaultVisibleBars = gamepad_state.active_bar < 3 or gamepad_state.active_bar > 4
+        else
+            isThisBarVisibleByDefault = h < 3
+            shouldDrawDefaultVisibleBars = gamepad_state.active_bar < 3
+        end
         local shouldDrawThisBar = isThisBarActive or isThisBarVisibleByDefault and shouldDrawDefaultVisibleBars
         if (shouldDrawThisBar) then
             for i=1,8,1 do
@@ -951,46 +1043,11 @@ function ui:check_recasts(player_hotbar, player_vitals, environment, spells, gam
                         if (crossbar_action ~= nil) then
                             skill_recasts = windower.ffxi.get_spell_recasts()
                             has_spell = crossbar_action.category ~= "blue magic" or spells[(action.action):lower()]
-                            local tool_info = consumables:get_ninja_spell_info(crossbar_action.id)
-                            if (tool_info ~= nil and tool_info.tool_count ~= nil and tool_info.master_tool_count ~= nil) then
-                                local total_tool_count = tool_info.tool_count + tool_info.master_tool_count
-                                local display_count = total_tool_count .. ''
-                                if (total_tool_count > 99) then
-                                    display_count = '99+'
-                                end
-                                self.hotbars[h].slot_cost[i]:text(display_count)
-                                if (tool_info.tool_count > 50) then
-                                    self.hotbars[h].slot_cost[i]:color(0, 255, 0)
-                                elseif (total_tool_count > 50) then
-                                    self.hotbars[h].slot_cost[i]:color(255, 255, 0)
-                                else
-                                    self.hotbars[h].slot_cost[i]:color(255, 0, 0)
-                                end
-                                self.hotbars[h].slot_cost[i]:show()
 
-                                if (total_tool_count == 0) then
-                                    -- set up "Xed-out" element
-                                    self.hotbars[h].slot_recast[i]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/red-x.png')
-                                    self.hotbars[h].slot_recast[i]:alpha(150)
-                                    self.hotbars[h].slot_recast[i]:size(40, 40)
-                                    self.hotbars[h].slot_recast[i]:pos(self:get_slot_x(h, i), self:get_slot_y(h, i))
-                                    self.hotbars[h].slot_recast[i]:show()
-                                    self.hotbars[h].slot_recast_text[i]:hide()
-                                end
-                            end
-                        end
-                    elseif (action.type == 'ja' or action.type == 'ws' or action.type == 'pet') then
-                        crossbar_action = crossbar_abilities[kebab_casify(action.action)]
-                        if (crossbar_action ~= nil) then
-                            if (action.type == 'ws') then
-                                skillchain_prop = skillchains.get_skillchain_result(crossbar_action.id, 'weapon_skills')
-                            elseif (action.type == 'ja' or action_type == 'pet') then
-                                skillchain_prop = skillchains.get_skillchain_result(crossbar_action.recast_id, 'job_abilities')
-
-                                local tool_info = consumables:get_ability_info_by_name(kebab_casify(action.action))
-
-                                if (tool_info ~= nil and tool_info.tool_count ~= nil and tool_info.master_tool_count ~= nil) then
-
+                            if (player.main_job == 'NIN' or player.sub_job == 'NIN') then
+                                local tool_info = consumables:get_ninja_spell_info(crossbar_action.id)
+                                -- if (tool_info ~= nil and tool_info.tool_count ~= nil and tool_info.master_tool_count ~= nil) then
+                                if (tool_info ~= nil) then
                                     local total_tool_count = tool_info.tool_count + tool_info.master_tool_count
                                     local display_count = total_tool_count .. ''
                                     if (total_tool_count > 99) then
@@ -1014,6 +1071,71 @@ function ui:check_recasts(player_hotbar, player_vitals, environment, spells, gam
                                         self.hotbars[h].slot_recast[i]:pos(self:get_slot_x(h, i), self:get_slot_y(h, i))
                                         self.hotbars[h].slot_recast[i]:show()
                                         self.hotbars[h].slot_recast_text[i]:hide()
+                                    end
+                                end
+                            end
+                        end
+                    elseif (action.type == 'ja' or action.type == 'ws' or action.type == 'pet') then
+                        crossbar_action = crossbar_abilities[kebab_casify(action.action)]
+                        if (crossbar_action ~= nil) then
+                            if (action.type == 'ws') then
+                                skillchain_prop = skillchains.get_skillchain_result(crossbar_action.id, 'weapon_skills')
+
+                            elseif (action.type == 'ja' or action.type == 'pet') then
+                                skillchain_prop = skillchains.get_skillchain_result(crossbar_action.recast_id, 'job_abilities')
+
+                                if (player.main_job == 'COR' or player.sub_job == 'COR') then
+                                    local tool_info = consumables:get_ability_info_by_name(kebab_casify(action.action))
+                                    if (tool_info ~= nil and tool_info.tool_count ~= nil and tool_info.master_tool_count ~= nil) then
+
+                                        local total_tool_count = tool_info.tool_count + tool_info.master_tool_count
+                                        local display_count = total_tool_count .. ''
+                                        if (total_tool_count > 99) then
+                                            display_count = '99+'
+                                        end
+                                        self.hotbars[h].slot_cost[i]:text(display_count)
+                                        if (tool_info.tool_count > 50) then
+                                            self.hotbars[h].slot_cost[i]:color(0, 255, 0)
+                                        elseif (total_tool_count > 50) then
+                                            self.hotbars[h].slot_cost[i]:color(255, 255, 0)
+                                        else
+                                            self.hotbars[h].slot_cost[i]:color(255, 0, 0)
+                                        end
+                                        self.hotbars[h].slot_cost[i]:show()
+
+                                        if (total_tool_count == 0) then
+                                            -- set up "Xed-out" element
+                                            self.hotbars[h].slot_recast[i]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/red-x.png')
+                                            self.hotbars[h].slot_recast[i]:alpha(150)
+                                            self.hotbars[h].slot_recast[i]:size(40, 40)
+                                            self.hotbars[h].slot_recast[i]:pos(self:get_slot_x(h, i), self:get_slot_y(h, i))
+                                            self.hotbars[h].slot_recast[i]:show()
+                                            self.hotbars[h].slot_recast_text[i]:hide()
+                                        end
+                                    end
+                                end
+
+                                if (player.main_job == 'SCH' or player.sub_job == 'SCH') then
+                                    local strat_charge_time = {[1]=240,[2]=120,[3]=80,[4]=60,[5]=48,[6]=33}
+                                    local level = nil
+                                    if player.main_job == 'SCH' then
+                                        level = player.main_job_level
+                                    elseif player.sub_job == 'SCH' then
+                                        level = player.sub_job_leel
+                                    end
+
+                                    if level ~= nil then
+                                        local max = math.floor(((level - 10) / 20) + 1)
+                                        local gift = 0
+                                        if player.main_job == 'SCH' and player.sch_jp_spent >= 550 then
+                                            gift = 1
+                                        end
+                                        local recastTime = windower.ffxi.get_ability_recasts()[231] or 0
+                                        local used = (recastTime/strat_charge_time[max+gift]):ceil()
+                                        local display_count =  tostring(max - used)
+                                        if consumables:get_strategem_required(action.action) then
+                                            self.hotbars[h].slot_cost[i]:text(display_count)
+                                        end
                                     end
                                 end
                             end
@@ -1205,7 +1327,7 @@ function ui:check_recasts(player_hotbar, player_vitals, environment, spells, gam
                 end
             end
 
-            if (not self.is_compact) then
+            if (not self.is_compact or self.UseAltLayout) then
                 self:show_controller_icons(h)
             end
         else
@@ -1229,21 +1351,57 @@ end
 
 -- show the dpad and face button icons
 function ui:show_controller_icons(h)
-    -- set up dpad element
-    local dpadSlot = 9
-    self.hotbars[h].slot_recast[dpadSlot]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/dpad_'..self.theme.button_layout..'.png')
-    self.hotbars[h].slot_recast[dpadSlot]:alpha(255)
-    self.hotbars[h].slot_recast[dpadSlot]:size(40, 40)
-    self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot), self:get_slot_y(h, dpadSlot) + 5)
-    self.hotbars[h].slot_recast[dpadSlot]:show()
+    if not self.UseAltLayout then
+        -- set up dpad element
+        local dpadSlot = 9
+        self.hotbars[h].slot_recast[dpadSlot]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/dpad_'..self.theme.button_layout..'.png')
+        self.hotbars[h].slot_recast[dpadSlot]:alpha(255)
+        self.hotbars[h].slot_recast[dpadSlot]:size(40, 40)
+        self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot), self:get_slot_y(h, dpadSlot) + 5)
+        self.hotbars[h].slot_recast[dpadSlot]:show()
 
-    -- set up face buttons element
-    local faceSlot = 10
-    self.hotbars[h].slot_recast[faceSlot]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/facebuttons_'..self.theme.button_layout..'.png')
-    self.hotbars[h].slot_recast[faceSlot]:alpha(255)
-    self.hotbars[h].slot_recast[faceSlot]:size(40, 40)
-    self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot), self:get_slot_y(h, faceSlot) + 5)
-    self.hotbars[h].slot_recast[faceSlot]:show()
+        -- set up face buttons element
+        local faceSlot = 10
+        self.hotbars[h].slot_recast[faceSlot]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/facebuttons_'..self.theme.button_layout..'.png')
+        self.hotbars[h].slot_recast[faceSlot]:alpha(255)
+        self.hotbars[h].slot_recast[faceSlot]:size(40, 40)
+        self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot), self:get_slot_y(h, faceSlot) + 5)
+        self.hotbars[h].slot_recast[faceSlot]:show()
+    else
+        -- set up dpad element
+        local dpadSlot = 3
+        self.hotbars[h].slot_recast[dpadSlot]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/dpad_'..self.theme.button_layout..'.png')
+        self.hotbars[h].slot_recast[dpadSlot]:alpha(255)
+        self.hotbars[h].slot_recast[dpadSlot]:size(40, 40)
+        -- set up face buttons element
+        local faceSlot = 5
+        self.hotbars[h].slot_recast[faceSlot]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/facebuttons_'..self.theme.button_layout..'.png')
+        self.hotbars[h].slot_recast[faceSlot]:alpha(255)
+        self.hotbars[h].slot_recast[faceSlot]:size(40, 40)
+
+        if h == 1 then
+            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot + 0.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[dpadSlot]:show()
+            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot + 2.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[faceSlot]:show()
+        elseif h == 3 or h == 4 then
+            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot - 2.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[dpadSlot]:show()
+            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot + 2.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[faceSlot]:show()
+        elseif (h ==5 or h == 6) and self.AutoHideExtraBars then
+            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot + 0.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[dpadSlot]:show()
+            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot - 0.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[faceSlot]:show()
+
+        end
+
+        -- if h == 2 or h == 6 then
+        --     self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot - 0.5), self:get_slot_y(h, 2) + 20)
+        --     self.hotbars[h].slot_recast[faceSlot]:show()
+        -- end
+    end
 end
 
 -- hide the dpad and face button icons
