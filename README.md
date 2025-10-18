@@ -1,15 +1,22 @@
 Forked off of AliekberFFXI's xivcrossbar!
 
 Fixes:
+
     Corrected pet abilites not showing up in the Add Ability GUI
+
     Fixed Ninja Tools not showing a count if using master tools
 
+
 Additions:
+
     Added Scholar Strategem Count to abilities that use them
+
     Added option in settings (AutoHideExtraBars) that will hide extra bars 5&6 until you double-tap LT or RT
+
     Added Alternate Layout (UseAltLayout) that mimics FFXIV's alt layout, where the left side will always be dpad and right side will be face buttons. Note: This makes editing the xmls a litte more confusing, as it alternates what is shows. For example, from left to right on your screen you will now see hotbar_1 slots 1-4, then hotbar_2 slots 1-4, then hotbar_1 slots 5-8 and finally hotbar_2 slots 5-8. Keep that in mind if manually editing the xmls.
 
 Controller changes:
+
     The controller AHK will now auto-select FFXI window if FFXI is not the active window when pushing one of the 4 facebuttons!
 
 
