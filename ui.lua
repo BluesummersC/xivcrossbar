@@ -32,7 +32,6 @@ local crossbar_abilities = require('resources/crossbar_abilities')
 local crossbar_spells = require('resources/crossbar_spells')
 local defaults = require('defaults')
 local player = require('player')
-local settings = config.load(defaults)
 
 local ui = {}
 
@@ -1369,30 +1368,30 @@ function ui:show_controller_icons(h)
         self.hotbars[h].slot_recast[faceSlot]:show()
     else
         -- set up dpad element
-        local dpadSlot = 3
+        local dpadSlot = 9
         self.hotbars[h].slot_recast[dpadSlot]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/dpad_'..self.theme.button_layout..'.png')
         self.hotbars[h].slot_recast[dpadSlot]:alpha(255)
         self.hotbars[h].slot_recast[dpadSlot]:size(40, 40)
         -- set up face buttons element
-        local faceSlot = 5
+        local faceSlot = 10
         self.hotbars[h].slot_recast[faceSlot]:path(windower.addon_path .. '/images/' .. get_icon_pathbase() .. '/ui/facebuttons_'..self.theme.button_layout..'.png')
         self.hotbars[h].slot_recast[faceSlot]:alpha(255)
         self.hotbars[h].slot_recast[faceSlot]:size(40, 40)
 
         if h == 1 then
-            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot + 0.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot - 5.5), self:get_slot_y(h, 2) + 20)
             self.hotbars[h].slot_recast[dpadSlot]:show()
-            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot + 2.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot - 2.5), self:get_slot_y(h, 2) + 20)
             self.hotbars[h].slot_recast[faceSlot]:show()
         elseif h == 3 or h == 4 then
-            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot - 2.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot - 8.5), self:get_slot_y(h, 2) + 20)
             self.hotbars[h].slot_recast[dpadSlot]:show()
-            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot + 2.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot - 2.5), self:get_slot_y(h, 2) + 20)
             self.hotbars[h].slot_recast[faceSlot]:show()
         elseif (h ==5 or h == 6) and self.AutoHideExtraBars then
-            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot + 0.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot - 5.5), self:get_slot_y(h, 2) + 20)
             self.hotbars[h].slot_recast[dpadSlot]:show()
-            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot - 0.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot - 2.5), self:get_slot_y(h, 2) + 20)
             self.hotbars[h].slot_recast[faceSlot]:show()
 
         end
@@ -1409,9 +1408,13 @@ function ui:hide_controller_icons(h)
     -- set up dpad element
     local dpadSlot = 9
     self.hotbars[h].slot_recast[dpadSlot]:hide()
+    local dpadSlot = 3
+    self.hotbars[h].slot_recast[dpadSlot]:hide()
 
     -- set up face buttons element
     local faceSlot = 10
+    self.hotbars[h].slot_recast[faceSlot]:hide()
+    local faceSlot = 5
     self.hotbars[h].slot_recast[faceSlot]:hide()
 end
 
