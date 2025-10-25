@@ -1388,10 +1388,15 @@ function ui:show_controller_icons(h)
             self.hotbars[h].slot_recast[dpadSlot]:show()
             self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot - 2.5), self:get_slot_y(h, 2) + 20)
             self.hotbars[h].slot_recast[faceSlot]:show()
-        elseif (h ==5 or h == 6) and self.AutoHideExtraBars then
+        elseif h ==5 and self.AutoHideExtraBars then
             self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot - 5.5), self:get_slot_y(h, 2) + 20)
             self.hotbars[h].slot_recast[dpadSlot]:show()
             self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot - 2.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[faceSlot]:show()
+        elseif h == 6 and self.AutoHideExtraBars then
+            self.hotbars[h].slot_recast[dpadSlot]:pos(self:get_slot_x(h, dpadSlot - 8.5), self:get_slot_y(h, 2) + 20)
+            self.hotbars[h].slot_recast[dpadSlot]:show()
+            self.hotbars[h].slot_recast[faceSlot]:pos(self:get_slot_x(h, faceSlot - 5.5), self:get_slot_y(h, 2) + 20)
             self.hotbars[h].slot_recast[faceSlot]:show()
 
         end
