@@ -1047,7 +1047,12 @@ function ui:check_recasts(player_hotbar, player_vitals, environment, spells, gam
                                 local tool_info = consumables:get_ninja_spell_info(crossbar_action.id)
                                 -- if (tool_info ~= nil and tool_info.tool_count ~= nil and tool_info.master_tool_count ~= nil) then
                                 if (tool_info ~= nil) then
-                                    local total_tool_count = tool_info.tool_count + tool_info.master_tool_count
+                                    local total_tool_count
+                                    if player.main_job == 'NIN' then
+                                        total_tool_count = tool_info.tool_count + tool_info.master_tool_count
+                                    else
+                                        total_tool_count = tool_info.tool_count
+                                    end
                                     local display_count = total_tool_count .. ''
                                     if (total_tool_count > 99) then
                                         display_count = '99+'
