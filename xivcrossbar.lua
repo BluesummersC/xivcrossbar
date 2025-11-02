@@ -950,6 +950,8 @@ end)
 windower.register_event('job change',function(main_job, main_job_level, sub_job, sub_job_level)
     skillchains.job_change(main_job, main_job_level)
     player:update_jobs(resources.jobs[main_job].ens, resources.jobs[sub_job].ens)
+    local default_active_environment = env_chooser:get_default_active_environment(player.hotbar)
+    player:set_active_environment(default_active_environment)
     reload_hotbar()
 end)
 
