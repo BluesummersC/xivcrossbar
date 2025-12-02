@@ -28,8 +28,8 @@
 
 -- Addon description
 _addon.name = 'XIV Crossbar' -- based on Edeon's XIV Hotbar
-_addon.author = 'Aliekber'
-_addon.version = '0.1'
+_addon.author = 'Aliekber, Aeliya'
+_addon.version = '0.2'
 _addon.language = 'english'
 _addon.commands = {'xivcrossbar', 'xb'}
 
