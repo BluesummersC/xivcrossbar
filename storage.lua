@@ -60,7 +60,7 @@ function split_hotbar(hotbar_to_split)
     all_jobs_hotbar.hotbar = {}
 
     for environment, hb in pairs(hotbar_to_split.hotbar) do
-        if (environment == 'all-jobs-default') then
+        if (string.sub(environment, 1, 4) == 'all-') then
             all_jobs_hotbar.hotbar[environment] = hb
         elseif (string.sub(environment, 1, 4) == 'job-') then
             job_hotbar.hotbar[environment] = hb
