@@ -27,7 +27,7 @@
 ]]
 
 -- Addon description
-_addon.name = 'XIV Crossbar' -- based on Edeon's XIV Hotbar
+_addon.name = 'XIVCrossbar' -- based on Edeon's XIV Hotbar
 _addon.author = 'Aliekber'
 _addon.version = '0.1'
 _addon.language = 'english'
@@ -150,8 +150,14 @@ end
 
 function start_controller_wrappers()
     -- only one of these is ever needed at a time, but there's no harm in running both
-    windower.send_command('run addons/xivcrossbar/ffxi_directinput.ahk')
-    windower.send_command('run addons/xivcrossbar/ffxi_xinput.ahk')
+    if (settings.controllermode == 1) then
+        windower.send_command('run addons/xivcrossbar/ffxi_directinput.ahk')
+    elseif (settings.controllermode == 2) then
+        windower.send_command('run addons/xivcrossbar/ffxi_xinput.ahk')
+    else
+        windower.send_command('run addons/xivcrossbar/ffxi_directinput.ahk')
+        windower.send_command('run addons/xivcrossbar/ffxi_xinput.ahk')
+    end
 end
 
 -- initialize addon
@@ -166,7 +172,12 @@ function initialize()
 
     if (buttonmapping.validate()) then
         theme_options.button_layout = buttonmapping.button_layout
-        action_binder:setup(buttonmapping, set_hotkey, delete_hotkey, theme_options, get_crossbar_sets, 150, 150, windower.get_windower_settings().ui_x_res - 300, windower.get_windower_settings().ui_y_res - 450)
+        if (settings.below1080) then
+            y_adjust = 250
+        else
+            y_adjust = 450
+        end
+        action_binder:setup(buttonmapping, set_hotkey, delete_hotkey, theme_options, get_crossbar_sets, 150, 150, windower.get_windower_settings().ui_x_res - 300, windower.get_windower_settings().ui_y_res - y_adjust)
     else
         theme_options.button_layout = 'nintendo'
         local temp_buttonmapping = {}
@@ -174,9 +185,9 @@ function initialize()
         theme_options.cancel_button = 'b'
         theme_options.mainmanu_button = 'y'
         theme_options.activewindow_button = 'x'
-        gamepad_mapper:setup(buttonmapping, start_controller_wrappers, theme_options, 150, 150, windower.get_windower_settings().ui_x_res - 300, windower.get_windower_settings().ui_y_res - 450)
+        gamepad_mapper:setup(buttonmapping, start_controller_wrappers, theme_options, 150, 150, windower.get_windower_settings().ui_x_res - 300, windower.get_windower_settings().ui_y_res - y_adjust)
         gamepad_mapper:show(true)
-        action_binder:setup(temp_buttonmapping, set_hotkey, delete_hotkey, theme_options, get_crossbar_sets, 150, 150, windower.get_windower_settings().ui_x_res - 300, windower.get_windower_settings().ui_y_res - 450)
+        action_binder:setup(temp_buttonmapping, set_hotkey, delete_hotkey, theme_options, get_crossbar_sets, 150, 150, windower.get_windower_settings().ui_x_res - 300, windower.get_windower_settings().ui_y_res - y_adjust)
     end
 
     player:initialize(windower_player, server, theme_options, enchanted_items)

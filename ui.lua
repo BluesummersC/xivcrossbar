@@ -990,6 +990,7 @@ function ui:check_recasts(player_hotbar, player_vitals, environment, spells, gam
                         self.hotbars[h].slot_icon[i]:path(windower.addon_path..'/images/' .. get_icon_pathbase() .. '/attack.png')
                         self.hotbars[h].slot_text[i]:text('Attack')
                     end
+                    self.hotbars[h].slot_icon[i]:pos(self:get_slot_x(h, i), self:get_slot_y(h, i))
                 elseif (action ~= nil and action.type == 'ta' and action.action == 'Switch Target' and action.alias == 'Switch Target') then
                     if (in_battle) then
                         self.hotbars[h].slot_icon[i]:path(windower.addon_path..'/images/' .. get_icon_pathbase() .. '/switchtarget.png')
@@ -998,8 +999,10 @@ function ui:check_recasts(player_hotbar, player_vitals, environment, spells, gam
                         self.hotbars[h].slot_icon[i]:path(windower.addon_path..'/images/' .. get_icon_pathbase() .. '/targetnpc.png')
                         self.hotbars[h].slot_text[i]:text('Target NPC')
                     end
+                    self.hotbars[h].slot_icon[i]:pos(self:get_slot_x(h, i), self:get_slot_y(h, i))
                 elseif (action ~= nil and action.type == 'map') then
                     self.hotbars[h].slot_icon[i]:path(windower.addon_path..'/images/' .. get_icon_pathbase() .. '/map.png')
+                    self.hotbars[h].slot_icon[i]:pos(self:get_slot_x(h, i), self:get_slot_y(h, i))
                 end
 
                 if action == nil or (action.type ~= 'ma' and action.type ~= 'ja' and action.type ~= 'ws' and action.type ~= 'pet' and action.type ~= 'enchanteditem') then
