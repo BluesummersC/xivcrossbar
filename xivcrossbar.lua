@@ -170,13 +170,14 @@ function initialize()
 
     if windower_player == nil then return end
 
+    if (settings.below1080) then
+        y_adjust = 250
+    else
+        y_adjust = 450
+    end
+
     if (buttonmapping.validate()) then
         theme_options.button_layout = buttonmapping.button_layout
-        if (settings.below1080) then
-            y_adjust = 250
-        else
-            y_adjust = 450
-        end
         action_binder:setup(buttonmapping, set_hotkey, delete_hotkey, theme_options, get_crossbar_sets, 150, 150, windower.get_windower_settings().ui_x_res - 300, windower.get_windower_settings().ui_y_res - y_adjust)
     else
         theme_options.button_layout = 'nintendo'
