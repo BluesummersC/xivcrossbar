@@ -109,6 +109,7 @@ defaults.Texts.Stroke.Green = 20
 defaults.Texts.Stroke.Blue = 20
 
 defaults.controllermode = 0
+defaults.autohotkey = 'enabled'
 defaults.below1080 = false
 
 return defaults

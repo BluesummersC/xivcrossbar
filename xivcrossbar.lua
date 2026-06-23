@@ -149,15 +149,17 @@ function get_crossbar_sets()
 end
 
 function start_controller_wrappers()
-    -- only one of these is ever needed at a time, but there's no harm in running both
-    if (settings.controllermode == 1) then
-        windower.send_command('run addons/xivcrossbar/ffxi_directinput.ahk')
-    elseif (settings.controllermode == 2) then
-        windower.send_command('run addons/xivcrossbar/ffxi_xinput.ahk')
-    else
-        windower.send_command('run addons/xivcrossbar/ffxi_directinput.ahk')
-        windower.send_command('run addons/xivcrossbar/ffxi_xinput.ahk')
-    end
+	if (settings.autohotkey == 'enabled') then
+		-- only one of these is ever needed at a time, but there's no harm in running both
+		if (settings.controllermode == 1) then
+			windower.send_command('run addons/xivcrossbar/ffxi_directinput.ahk')
+		elseif (settings.controllermode == 2) then
+			windower.send_command('run addons/xivcrossbar/ffxi_xinput.ahk')
+		else
+			windower.send_command('run addons/xivcrossbar/ffxi_directinput.ahk')
+			windower.send_command('run addons/xivcrossbar/ffxi_xinput.ahk')
+		end
+	end
 end
 
 -- initialize addon
