@@ -32,6 +32,10 @@ OR (for Steam Deck users)
 
     run C:/Windows/System32/cmd.exe /c start /unix /home/deck/Games/final-fantasy-xi-online/FFXI_Input.sh
 
+OR (for 2026 Steam Controller users)
+
+1c) Apply steam input profile steam://controllerconfig/230330/3750616172
+	
 2) Enable the "Run" plugin in Windower
 
 3) Run FFXI Configuration tool and set up your gamepad to match ConfigureYourGamepadLikeThis.jpg. Green box = required to have set, Red box = required to leave blank, Yellow box = configure it the way you usually do.
