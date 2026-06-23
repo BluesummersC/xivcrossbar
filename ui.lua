@@ -134,13 +134,13 @@ function ui:get_slot_x(h, i)
     if not self.UseAltLayout then
         local base = self.pos_x - 50
         if (h == 2) then
-            base = base + 300
+			base = base + self.theme.hotbar2_offset_x -- Offset between left and right cross hotbars
         elseif (h == 3 or h == 4) then
-            base = base + 150
+			base = base + self.theme.hotbar3_offset_x -- offset of the Expanded hotbar
         elseif (h == 5) then
-            base = base - 70 -- left doublepress crossbar
+			base = base + self.theme.hotbar5_offset_x -- left doublepress crossbar offset
         elseif (h == 6) then
-            base = base + 370 -- right doublepress crossbar
+			base = base + self.theme.hotbar6_offset_x -- right doublepress crossbar offset
         end
 
         -- move the last icon in each group of 4 to the middle create the cross
@@ -210,7 +210,7 @@ function ui:get_slot_y(h, i)
 
     -- the doublepress crossbars are up higher than the others
     if (h > 4) then
-        base = base - spacing * 3.5
+        base = base - spacing * self.theme.wxhb_spacing -- Spacing between the basic and double press
     end
 
     -- move the second icon in each group of 4 to the top and move the
@@ -235,6 +235,12 @@ function ui:setup(theme_options, enchanted_items)
     icon_pack = theme_options.iconpack
 
     self.frame_skip = theme_options.frame_skip
+
+	self.theme.wxhb_spacing = theme_options.wxhb_spacing
+	self.theme.hotbar2_offset_x = theme_options.hotbar2_offset_x
+	self.theme.hotbar3_offset_x = theme_options.hotbar3_offset_x
+	self.theme.hotbar5_offset_x = theme_options.hotbar5_offset_x
+	self.theme.hotbar6_offset_x = theme_options.hotbar6_offset_x
 
     self.theme.hide_empty_slots = theme_options.hide_empty_slots
     self.theme.hide_action_names = theme_options.hide_action_names

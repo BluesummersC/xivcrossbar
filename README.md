@@ -13,6 +13,8 @@ Additions:
 
     Added option in settings (AutoHideExtraBars) that will hide extra bars 5&6 until you double-tap LT or RT
 
+	Added options in settings to adjust offsets of hotbars relative to hotbar 1 when not in the Alternative layout
+
     Added Alternate Layout (UseAltLayout) that mimics FFXIV's alt layout, where the left side will always be dpad and right side will be face buttons. Note: This makes editing the xmls a litte more confusing, as it alternates what is shows. For example, from left to right on your screen you will now see hotbar_1 slots 1-4, then hotbar_2 slots 1-4, then hotbar_1 slots 5-8 and finally hotbar_2 slots 5-8. Keep that in mind if manually editing the xmls.
 
 Controller changes:
