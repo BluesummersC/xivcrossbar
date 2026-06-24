@@ -65,8 +65,13 @@ theme.apply = function (settings)
     options.slot_opacity = settings.Style.SlotAlpha
     options.slot_spacing = settings.Style.SlotSpacing
     options.hotbar_spacing = settings.Style.HotbarSpacing
+	options.wxhb_spacing = settings.Style.WXHBSpacing
     options.offset_x = settings.Style.OffsetX
     options.offset_y = settings.Style.OffsetY
+	options.hotbar2_offset_x = settings.Style.Hotbar2OffsetX
+	options.hotbar3_offset_x = settings.Style.Hotbar3OffsetX
+	options.hotbar5_offset_x = settings.Style.Hotbar5OffsetX
+	options.hotbar6_offset_x = settings.Style.Hotbar6OffsetX
 
     options.feedback_max_opacity = settings.Color.Feedback.Opacity
     options.feedback_speed = settings.Color.Feedback.Speed

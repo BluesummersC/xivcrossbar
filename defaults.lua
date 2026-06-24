@@ -73,8 +73,13 @@ defaults.Style = {}
 defaults.Style.SlotAlpha = 100
 defaults.Style.SlotSpacing = 6
 defaults.Style.HotbarSpacing = 56
+defaults.Style.WXHBSpacing = 3.5
 defaults.Style.OffsetX = 0
 defaults.Style.OffsetY = 0
+defaults.Style.Hotbar2OffsetX = 300
+defaults.Style.Hotbar3OffsetX = 150
+defaults.Style.Hotbar5OffsetX = -70
+defaults.Style.Hotbar6OffsetX = 370
 
 defaults.Color = {}
 defaults.Color.MpCost = {}
@@ -109,6 +114,7 @@ defaults.Texts.Stroke.Green = 20
 defaults.Texts.Stroke.Blue = 20
 
 defaults.controllermode = 0
+defaults.autohotkey = 'enabled'
 defaults.below1080 = false
 
 return defaults

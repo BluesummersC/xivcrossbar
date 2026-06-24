@@ -13,6 +13,8 @@ Additions:
 
     Added option in settings (AutoHideExtraBars) that will hide extra bars 5&6 until you double-tap LT or RT
 
+	Added options in settings to adjust offsets of hotbars relative to hotbar 1 when not in the Alternative layout
+
     Added Alternate Layout (UseAltLayout) that mimics FFXIV's alt layout, where the left side will always be dpad and right side will be face buttons. Note: This makes editing the xmls a litte more confusing, as it alternates what is shows. For example, from left to right on your screen you will now see hotbar_1 slots 1-4, then hotbar_2 slots 1-4, then hotbar_1 slots 5-8 and finally hotbar_2 slots 5-8. Keep that in mind if manually editing the xmls.
 
 Controller changes:
@@ -30,6 +32,11 @@ OR (for Steam Deck users)
 
     run C:/Windows/System32/cmd.exe /c start /unix /home/deck/Games/final-fantasy-xi-online/FFXI_Input.sh
 
+OR (for 2026 Steam Controller users)
+
+1c) Apply steam input profile steam://controllerconfig/230330/3750616172
+	- Note: If you don't it to open the AHK script on load, you can disable it in the settings!
+	
 2) Enable the "Run" plugin in Windower
 
 3) Run FFXI Configuration tool and set up your gamepad to match ConfigureYourGamepadLikeThis.jpg. Green box = required to have set, Red box = required to leave blank, Yellow box = configure it the way you usually do.
