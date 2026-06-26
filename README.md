@@ -34,7 +34,7 @@ OR (for Steam Deck users)
 
 OR (for 2026 Steam Controller users)
 
-1c) Apply steam input profile steam://controllerconfig/230330/3751193030 (workshop://3751193030)
+1c) Apply steam input profile steam://controllerconfig/230330/3751915997 (workshop://3751915997)
 	- Note: If you don't it to open the AHK script on load, you can disable it in the settings!
 	
 2) Enable the "Run" plugin in Windower
