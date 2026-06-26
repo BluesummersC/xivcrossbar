@@ -1136,7 +1136,7 @@ function ui:check_recasts(player_hotbar, player_vitals, environment, spells, gam
                                     if player.main_job == 'SCH' then
                                         level = player.main_job_level
                                     elseif player.sub_job == 'SCH' then
-                                        level = player.sub_job_leel
+                                        level = player.sub_job_level
                                     end
 
                                     if level ~= nil then
