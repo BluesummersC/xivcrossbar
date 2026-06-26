@@ -257,6 +257,8 @@ function ui:setup(theme_options, enchanted_items)
     self.theme.skillchain_open_color_red = theme_options.skillchain_open_color_red
     self.theme.skillchain_open_color_green = theme_options.skillchain_open_color_green
     self.theme.skillchain_open_color_blue = theme_options.skillchain_open_color_blue
+    self.theme.skillchain_indicator_offset_x = theme_options.skillchain_indicator_offset_x
+    self.theme.skillchain_indicator_offset_y = theme_options.skillchain_indicator_offset_y
 
     self.theme.slot_opacity = theme_options.slot_opacity
     self.theme.disabled_slot_opacity = theme_options.disabled_slot_opacity
@@ -291,13 +293,13 @@ function ui:load(theme_options)
 
     windower.prim.create('skillchain_indicator_bg')
     windower.prim.set_color('skillchain_indicator_bg', 150, 0, 0, 0)
-    windower.prim.set_position('skillchain_indicator_bg', self:get_slot_x(1, 1) - 12, self:get_slot_y(1, 4) - 32)
+    windower.prim.set_position('skillchain_indicator_bg', self:get_slot_x(1, 1) - 12 + self.theme.skillchain_indicator_offset_x, self:get_slot_y(1, 4) - 32 + self.theme.skillchain_indicator_offset_y)
     windower.prim.set_size('skillchain_indicator_bg', 604, 14)
     windower.prim.set_visibility('skillchain_indicator_bg', false)
 
     windower.prim.create('skillchain_indicator')
     windower.prim.set_color('skillchain_indicator', 220, 15, 205, 5)
-    windower.prim.set_position('skillchain_indicator', self:get_slot_x(1, 1) - 10, self:get_slot_y(1, 4) - 30)
+    windower.prim.set_position('skillchain_indicator', self:get_slot_x(1, 1) - 10 + self.theme.skillchain_indicator_offset_x, self:get_slot_y(1, 4) - 30 + self.theme.skillchain_indicator_offset_y)
     windower.prim.set_size('skillchain_indicator', 600, 10)
     windower.prim.set_visibility('skillchain_indicator', false)
 
@@ -885,11 +887,11 @@ function ui:display_skillchain_indicator(player_vitals, skillchain_delay, skillc
                     self.theme.skillchain_waiting_color_blue)
             end
             windower.prim.set_size('skillchain_indicator', base_width, 4)
-            windower.prim.set_position('skillchain_indicator', left_spacer + self:get_slot_x(1, 1) - 10, self:get_slot_y(1, 4) - 27)
+            windower.prim.set_position('skillchain_indicator', left_spacer + self:get_slot_x(1, 1) - 10 + self.theme.skillchain_indicator_offset_x, self:get_slot_y(1, 4) - 27 + self.theme.skillchain_indicator_offset_y)
             windower.prim.set_visibility('skillchain_indicator', true)
 
             windower.prim.set_size('skillchain_indicator_bg', base_width + 4, 8)
-            windower.prim.set_position('skillchain_indicator_bg', left_spacer + self:get_slot_x(1, 1) - 12, self:get_slot_y(1, 4) - 29)
+            windower.prim.set_position('skillchain_indicator_bg', left_spacer + self:get_slot_x(1, 1) - 12 + self.theme.skillchain_indicator_offset_x, self:get_slot_y(1, 4) - 29 + self.theme.skillchain_indicator_offset_y)
             windower.prim.set_visibility('skillchain_indicator_bg', true)
         elseif (skillchain_window > 0) then
             local fraction = skillchain_window / 7.0
@@ -905,11 +907,11 @@ function ui:display_skillchain_indicator(player_vitals, skillchain_delay, skillc
                     self.theme.skillchain_open_color_blue)
             end
             windower.prim.set_size('skillchain_indicator', base_width, 10)
-            windower.prim.set_position('skillchain_indicator', left_spacer + self:get_slot_x(1, 1) - 10, self:get_slot_y(1, 4) - 30)
+            windower.prim.set_position('skillchain_indicator', left_spacer + self:get_slot_x(1, 1) - 10 + self.theme.skillchain_indicator_offset_x, self:get_slot_y(1, 4) - 30 + self.theme.skillchain_indicator_offset_y)
             windower.prim.set_visibility('skillchain_indicator', true)
 
             windower.prim.set_size('skillchain_indicator_bg', base_width + 4, 14)
-            windower.prim.set_position('skillchain_indicator_bg', left_spacer + self:get_slot_x(1, 1) - 12, self:get_slot_y(1, 4) - 32)
+            windower.prim.set_position('skillchain_indicator_bg', left_spacer + self:get_slot_x(1, 1) - 12 + self.theme.skillchain_indicator_offset_x, self:get_slot_y(1, 4) - 32 + self.theme.skillchain_indicator_offset_y)
             windower.prim.set_visibility('skillchain_indicator_bg', true)
         else
             windower.prim.set_visibility('skillchain_indicator', false)

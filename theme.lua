@@ -45,6 +45,8 @@ theme.apply = function (settings)
     options.skillchain_open_color_red = settings.SkillchainIndicator.WindowOpenColor.Red
     options.skillchain_open_color_green = settings.SkillchainIndicator.WindowOpenColor.Green
     options.skillchain_open_color_blue = settings.SkillchainIndicator.WindowOpenColor.Blue
+    options.skillchain_indicator_offset_x = settings.SkillchainIndicator.OffsetX
+    options.skillchain_indicator_offset_y = settings.SkillchainIndicator.OffsetY
 
     options.iconpack = settings.iconpack
     options.is_compact = settings.iscompact

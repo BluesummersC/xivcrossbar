@@ -50,6 +50,8 @@ defaults.SkillchainIndicator.WindowOpenColor = {}
 defaults.SkillchainIndicator.WindowOpenColor.Red = 15
 defaults.SkillchainIndicator.WindowOpenColor.Green = 205
 defaults.SkillchainIndicator.WindowOpenColor.Blue = 5
+defaults.SkillchainIndicator.OffsetX = 0
+defaults.SkillchainIndicator.OffsetY = 0
 
 defaults.Hotbar = {}
 defaults.Hotbar.Number = 3
